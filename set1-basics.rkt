@@ -1,5 +1,5 @@
 #lang racket
-(require file/sha1) ;for hextstring->bytes
+(require file/sha1) ;for hex-string->bytes
 
 ; SET 1: Basics
 ; =============
@@ -14,7 +14,8 @@
 ;     SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t
 
 
-(define base64chars "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/")
+(define (base64char n)
+  (string-ref "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/" n))
 
 ; helper function to split a flat list into a list of lists where each
 ; contained list has the specified number (chunk-size) of elements.
@@ -33,9 +34,9 @@
        (bytes-ref byte-str 2))))
 
 (define (my-base64-result num)
-  (list->string (list (string-ref base64chars (bitwise-and (arithmetic-shift num -18) 63))
-                      (string-ref base64chars (bitwise-and (arithmetic-shift num -12) 63))
-                      (string-ref base64chars (bitwise-and (arithmetic-shift num -6) 63))
-                      (string-ref base64chars (bitwise-and num 63)))))
+  (list->string (list (base64char (bitwise-and (arithmetic-shift num -18) 63))
+                      (base64char (bitwise-and (arithmetic-shift num -12) 63))
+                      (base64char (bitwise-and (arithmetic-shift num -6) 63))
+                      (base64char (bitwise-and num 63)))))
 
 ; [NOT YET COMPLETE]
